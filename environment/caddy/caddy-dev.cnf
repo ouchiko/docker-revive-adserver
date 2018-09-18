@@ -1,0 +1,10 @@
+localhost {
+  root /var/www/html/www
+  gzip
+  log ../access.log
+  rewrite {
+    to {path} {path}/ /index.php?{query}
+  }
+  fastcgi / rev-php:9000 php
+  tls off
+}

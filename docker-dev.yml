@@ -1,0 +1,16 @@
+version: '2'
+services:
+  #-------------------------------------------------------
+  # Caddy Installation - automated SSL hosting.
+  #-------------------------------------------------------
+  rev-caddy:
+      networks:
+        - frontend
+        - backend
+      image: abiosoft/caddy
+      volumes:
+        - ./storage/caddy/.caddy:/etc/caddycerts
+        - ./environment/caddy/caddy-dev.cnf:/etc/Caddyfile
+        - ./revive-app/www:/var/www/html/www
+      ports:
+        - 80:2015

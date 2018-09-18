@@ -1,0 +1,39 @@
+version: '2'
+services:
+  #-------------------------------------------------------
+  # Testing the system using our internal database.  We don't actually need this
+  # when running properly.
+  #-------------------------------------------------------
+  rev-mysql:
+    networks:
+        - backend
+    image: mysql:5.7
+    restart: unless-stopped
+    container_name: gf-mysql
+    env_file:
+        - ./environment/mysql/mysql.env
+    volumes:
+        - ./storage/mysql:/var/lib/mysql
+        - ./environment/mysql/conf.d:/etc/mysql/conf.d
+        - ./storage/logs/mysql:/var/log/mysql
+    ports:
+        - 3306:3306
+
+  #-------------------------------------------------------
+  # PHP Processor
+  #-------------------------------------------------------
+  rev-php:
+      networks:
+        - backend
+      build:
+       context: .
+       dockerfile: ./containers/php-fpm/Dockerfile
+      volumes:
+        - ./revive-app:/var/www/html
+      restart: unless-stopped
+
+
+
+networks:
+  backend:
+  frontend:
